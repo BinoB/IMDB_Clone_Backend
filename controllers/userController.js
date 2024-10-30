@@ -147,14 +147,17 @@ export const getUser = asyncHandler(async (req, res) => {
 export const loginStatus = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
   if (!token) {
-    return res.json(false);
+    return res.status(401).json({ loggedIn: false, message: "Session expired, please log in again." });
   }
-  // Verify Token
-  const verified = jwt.verify(token, process.env.JWT_SECRET);
-  if (verified) {
-    return res.json(true);
+  try {
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    if (verified) {
+      return res.status(200).json({ loggedIn: true });
+    }
+  } catch (error) {
+    // Token is invalid or expired
+    return res.status(401).json({ loggedIn: false, message: "Session expired, please log in again." });
   }
-  return res.json(false);
 });
 
 // Update User
