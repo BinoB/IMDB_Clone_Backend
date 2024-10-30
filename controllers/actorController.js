@@ -1,10 +1,62 @@
+import dotenv from 'dotenv';
 import asyncHandler from "express-async-handler";
 import Actor from "../models/actorModel.js";
 import { fileSizeFormatter } from "../utils/fileUpload.js";
 import cloudinary from "cloudinary";
-cloudinary.v2;
+// cloudinary.v2;
+dotenv.config();
+// cloudinary.v2.config({
+// 	url: process.env.CLOUDINARY_URL,
+//   });
 
+cloudinary.v2.config({
+	cloud_name: process.env.CLOUD_NAME, // Use your actual cloud name
+	api_key: process.env.API_KEY,        // Use your actual API key
+	api_secret: process.env.API_SECRET,  // Use your actual API secret
+  });
+export const createActor = asyncHandler(async (req, res) => {
+	const { name, gender, dob, bio } = req.body;
+  
+	// Validation
+	if (!name || !gender || !dob || !bio) {
+	  return res.status(400).json({ message: "All fields are required" });
+	}
+  
+	// Handle image upload
+	let fileData = {};
+	if (req.file) {
+	  let uploadedFile;
+	  try {
+		uploadedFile = await cloudinary.uploader.upload(req.file.path, {
+		  folder: "Actors",
+		  resource_type: "image",
+		});
+		fileData = {
+		  fileName: req.file.originalname,
+		  filePath: uploadedFile.secure_url,
+		  fileType: req.file.mimetype,
+		  fileSize: fileSizeFormatter(req.file.size, 2),
+		};
+	  } catch (error) {
+		console.error("Error uploading to Cloudinary:", error); // Log the error for debugging
+		return res.status(500).json({ message: "Error uploading to Cloudinary", error: error.message });
+	  }
+	}
+  
+	// Create new actor
+	const actor = await Actor.create({
+	  user: req.user.id,
+	  name,
+	  gender,
+	  dob,
+	  bio,
+	  image: fileData,
+	});
+  
+	res.status(201).json(actor);
+  });
 
+/* 
 //Create Actor
 
 export const createActor = asyncHandler(async(req,res)=>{
@@ -48,7 +100,7 @@ export const createActor = asyncHandler(async(req,res)=>{
 	  });
 	
 	  res.status(201).json(actor);
-})
+}) */
 
 
 export // Get all Products

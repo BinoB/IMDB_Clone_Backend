@@ -16,7 +16,7 @@ const actorSchema = new Schema(
 		// Reference to the User who added the movie
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
-		required: true,
+		// required: true,
 	  },
   },
   { timestamps: true }
