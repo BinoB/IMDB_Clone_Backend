@@ -47,7 +47,7 @@ The application uses MongoDB, with schemas designed for data normalization:
   movies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
 }
 ```
-### Producer 
+### Producer Schema
 ```javascript
 {
   name: String,
