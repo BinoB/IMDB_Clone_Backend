@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000","https://imdb-clone-backend-w6o0.onrender.com" ],
+    origin: ["http://localhost:3000","https://poetic-blancmange-b9e3a5.netlify.app" ],
     credentials: true,
   })
   
