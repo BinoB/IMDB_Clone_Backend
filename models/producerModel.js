@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 
 const producerSchema = new Schema({
   name: { type: String, required: true },
-  gender: { type: String, enum: ['Male', 'Female', 'Other'], required: true },
+  gender: { type: String,  required: true },
   dob: { type: Date, required: true }, // Date of Birth
   bio: { type: String,required: true }, // Short biography
   image: {

@@ -1,16 +1,17 @@
 import express from 'express';
-import { createProducer, deleteProducer, getproducer, getProducers, updateProducer } from '../controllers/producerController.js';
+import { createProducer, deleteProducer, getProducer, getProducers, updateProducer } from '../controllers/producerController.js';
 import protect from '../middleWare/authMiddleware.js';
+import { upload } from '../utils/fileUpload.js';
 const router = express.Router();
 
 
 // Import controllers
 
-router.post('/addproducer',protect, createProducer);
-router.get('/getproducer',protect,getProducers);
-router.get('/getproducer/:id',protect,getproducer);
-router.delete('/deleteproducer/:id',protect,deleteProducer);
-router.patch('/updateproducer/:id',protect,updateProducer);
+router.post('/',protect, protect,upload.single("image"),createProducer);
+router.get('/',protect,getProducers);
+router.get('/:id',protect,getProducer);
+router.delete('/:id',protect,deleteProducer);
+router.patch('/:id',protect,protect,upload.single("image"),updateProducer);
 
 
 export default router 
